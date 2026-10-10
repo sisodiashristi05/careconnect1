@@ -11,7 +11,6 @@
     --light-blue: #edf4ff;
     --text: #1b2940;
     --muted: #64748b;
-    --white: #ffffff;
     --red: #e52535;
     --green: #14865c;
 }
@@ -154,7 +153,8 @@ main {
 }
 
 .option:focus-visible,
-.sos-button:focus-visible {
+.sos-button:focus-visible,
+.clear-btn:focus-visible {
     outline: 4px solid #8ab4ff;
     outline-offset: 4px;
 }
@@ -169,8 +169,6 @@ main {
     font-size: 12px;
     color: var(--blue);
 }
-
-/* SOS emergency button */
 
 .sos-wrapper {
     margin: 30px 0;
@@ -227,8 +225,6 @@ main {
     }
 }
 
-/* Selected request display */
-
 .response {
     background: white;
     border-radius: 20px;
@@ -266,11 +262,6 @@ main {
     cursor: pointer;
 }
 
-.clear-btn:focus-visible {
-    outline: 3px solid #8ab4ff;
-    outline-offset: 3px;
-}
-
 footer {
     text-align: center;
     padding: 26px 15px 32px;
@@ -278,8 +269,6 @@ footer {
     font-size: 13px;
     line-height: 1.8;
 }
-
-/* Mobile responsive layout */
 
 @media (max-width: 800px) {
     .options {
@@ -328,7 +317,7 @@ footer {
     }
 
     .sos-text strong {
-        font-size: 21px;
+        font-size: 20px;
     }
 
     .option {
@@ -354,13 +343,12 @@ footer {
 
 <header>
     <div class="brand">
-        <div class="logo" aria-hidden="true">💙</div>
+        <div class="logo">💙</div>
         <div>
             <h1>CareConnect</h1>
             <p>Your care, your comfort</p>
         </div>
     </div>
-
     <div class="status">● Care interface</div>
 </header>
 
@@ -383,76 +371,68 @@ footer {
 
         <button class="option"
                 data-name="I need water"
-                data-emoji="💧"
-                aria-pressed="false">
+                data-emoji="💧">
             <span class="emoji">💧</span>
             <span>I need water</span>
         </button>
 
         <button class="option"
                 data-name="I need food"
-                data-emoji="🍲"
-                aria-pressed="false">
+                data-emoji="🍲">
             <span class="emoji">🍲</span>
             <span>I need food</span>
         </button>
 
         <button class="option"
                 data-name="I need help"
-                data-emoji="🤝"
-                aria-pressed="false">
+                data-emoji="🤝">
             <span class="emoji">🤝</span>
             <span>I need help</span>
         </button>
 
         <button class="option"
-                data-name="Change my position"
-                data-emoji="🛏️"
-                aria-pressed="false">
+                data-name="I need to change my position"
+                data-emoji="🛏️">
             <span class="emoji">🛏️</span>
-            <span>Change my position</span>
+            <span>I need to change my position</span>
         </button>
 
         <button class="option"
                 data-name="I need my medicine"
-                data-emoji="💊"
-                aria-pressed="false">
+                data-emoji="💊">
             <span class="emoji">💊</span>
             <span>I need my medicine</span>
         </button>
 
         <button class="option"
                 data-name="I need medical assistance"
-                data-emoji="🩺"
-                aria-pressed="false">
+                data-emoji="🩺">
             <span class="emoji">🩺</span>
             <span>I need medical assistance</span>
         </button>
 
         <button class="option"
                 data-name="I need my caregiver"
-                data-emoji="👩‍⚕️"
-                aria-pressed="false">
+                data-emoji="👩‍⚕️">
             <span class="emoji">👩‍⚕️</span>
             <span>I need my caregiver</span>
         </button>
 
         <button class="option"
-                data-name="I need to use washroom"
-                data-emoji="🚻"
-                aria-pressed="false">
+                data-name="I need to use the washroom"
+                data-emoji="🚻">
             <span class="emoji">🚻</span>
-            <span>I need to use washroom</span>
+            <span>I need to use the washroom</span>
         </button>
 
     </section>
 
-    <!-- Direct SOS button: no confirmation dialog -->
+    <!-- Direct SOS button: no confirmation popup -->
 
     <section class="sos-wrapper">
         <button class="sos-button"
                 id="sosButton"
-                aria-label="SOS, I have an emergency">
+                aria-label="SOS, I need emergency help">
 
             <span class="sos-icon" aria-hidden="true">🚨</span>
 
@@ -464,7 +444,7 @@ footer {
         </button>
     </section>
 
-    <!-- Displays the selected request -->
+    <!-- Selected request display -->
 
     <section class="response"
              aria-live="polite"
@@ -509,38 +489,22 @@ const responseMessage = document.getElementById("responseMessage");
 const clearButton = document.getElementById("clearButton");
 const sosButton = document.getElementById("sosButton");
 
-// Caregiver messages associated with each selection
+// The exact words displayed and spoken for each option
 const messages = {
-    "I need water":
-        "The user is requesting drinking water. Please assist.",
-
-    "I need food":
-        "The user is requesting food. Please assist.",
-
-    "I need help":
-        "The user needs help. Please check on them.",
-
-    "Change my position":
-        "The user needs help changing position. Please assist safely.",
-
-    "I need my medicine":
-        "The user is requesting their prescribed medicine. Please check their medication schedule.",
-
-    "I need medical assistance":
-        "The user is requesting medical assistance. Please assess their needs.",
-
-    "I need my caregiver":
-        "The user would like their caregiver to come.",
-
-    "I need to use washroom":
-        "The user needs assistance accessing the washroom."
+    "I need water": "I need water",
+    "I need food": "I need food",
+    "I need help": "I need help",
+    "I need to change my position": "I need to change my position",
+    "I need my medicine": "I need my medicine",
+    "I need medical assistance": "I need medical assistance",
+    "I need my caregiver": "I need my caregiver",
+    "I need to use the washroom": "I need to use the washroom"
 };
 
-// Voice output using the browser's built-in speech engine
+// Speak only the selected phrase
 function speakText(text) {
     if (!("speechSynthesis" in window)) {
-        responseMessage.textContent +=
-            " Voice output is not supported by this browser.";
+        console.warn("Voice output is not supported in this browser.");
         return;
     }
 
@@ -557,7 +521,7 @@ function speakText(text) {
     window.speechSynthesis.speak(speech);
 }
 
-// Remove selection from all care options
+// Deselect all care options
 function deselectAllOptions() {
     options.forEach(option => {
         option.classList.remove("selected");
@@ -565,7 +529,7 @@ function deselectAllOptions() {
     });
 }
 
-// Display and announce a selected request
+// Select an option, display it, and speak it
 function selectOption(button) {
     deselectAllOptions();
 
@@ -579,9 +543,10 @@ function selectOption(button) {
     responseIcon.textContent = emoji;
     responseTitle.textContent = name;
     responseMessage.textContent = message;
+
     clearButton.hidden = false;
 
-    speakText(name + ". " + message);
+    speakText(message);
 
     // ESP32 / Blynk integration point:
     // Send the selected request to your backend here.
@@ -589,12 +554,14 @@ function selectOption(button) {
 
 // Add click events to the care options
 options.forEach(button => {
+    button.setAttribute("aria-pressed", "false");
+
     button.addEventListener("click", () => {
         selectOption(button);
     });
 });
 
-// Clear the selected request
+// Clear the current selection
 clearButton.addEventListener("click", () => {
     deselectAllOptions();
 
@@ -611,30 +578,25 @@ clearButton.addEventListener("click", () => {
     }
 });
 
-// SOS acts immediately without asking for confirmation
+// SOS: immediate emergency request, no confirmation
 sosButton.addEventListener("click", () => {
     deselectAllOptions();
 
-    responseIcon.textContent = "🚨";
-    responseTitle.textContent = "SOS — EMERGENCY REQUEST";
+    const emergencyMessage = "I need emergency help";
 
-    responseMessage.textContent =
-        "The user needs urgent assistance. Contact the caregiver " +
-        "or local emergency services immediately.";
+    responseIcon.textContent = "🚨";
+    responseTitle.textContent = emergencyMessage;
+    responseMessage.textContent = emergencyMessage;
 
     clearButton.hidden = false;
 
-    speakText(
-        "Emergency! Emergency! The user needs urgent assistance. " +
-        "Please contact the caregiver or local emergency services immediately."
-    );
+    speakText(emergencyMessage);
 
     // ESP32 / Blynk integration point:
     // Send an SOS event to your backend here.
     //
-    // Important: this code announces the emergency locally.
-    // It does not automatically alert a caregiver or call
-    // emergency services until backend integration is added.
+    // This webpage speaks the request but does not
+    // automatically contact a caregiver or emergency services.
 });
 </script>
 
